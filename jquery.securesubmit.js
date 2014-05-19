@@ -64,7 +64,7 @@ var hps = (function ($) {
                 "object": "token",
                 "token_type": "supt",
                 "_method": "post",
-                "card[number]": $.trim(options.data.number),
+                "card[number]": $.trim(options.data.number.replace(/\s+|-/g, '')),
                 "card[cvc]": $.trim(options.data.cvc),
                 "card[exp_month]": $.trim(options.data.exp_month),
                 "card[exp_year]": $.trim(options.data.exp_year)
