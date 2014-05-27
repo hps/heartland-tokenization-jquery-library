@@ -54,9 +54,9 @@ var hps = (function ($) {
         hasData: function (element) {
             return typeof HPS.getData(element) === 'object';
         },
-				
-		tokenize: function (options) {			
-			var gateway_url, params, env;
+                
+        tokenize: function (options) {          
+            var gateway_url, params, env;
 
             // add additional service parameters
             params = $.param({
@@ -98,13 +98,13 @@ var hps = (function ($) {
                         // handle exception
                         HPS.error(response.error.message);
                     }
-					else if(typeof options.success === 'function') {
-						options.success(response);
-					}
+                    else if(typeof options.success === 'function') {
+                        options.success(response);
+                    }
                 }
             });
 
-		},
+        },
 
         empty: function (val) {
             return val === undefined || val.length === 0;
@@ -163,41 +163,41 @@ var hps = (function ($) {
                     }
                 }
 
-				HPS.tokenize({
-					data: {
-						public_key: data.public_key,
-		                number: $.trim($("#card_number").val()),
-		                cvc: $.trim($("#card_cvc").val()),
-		                exp_month: $.trim($("#exp_month").val()),
-		                exp_year: $.trim($("#exp_year").val())
-					},
-					success: function(response){
+                HPS.tokenize({
+                    data: {
+                        public_key: data.public_key,
+                        number: $.trim($("#card_number").val()),
+                        cvc: $.trim($("#card_cvc").val()),
+                        exp_month: $.trim($("#exp_month").val()),
+                        exp_year: $.trim($("#exp_year").val())
+                    },
+                    success: function(response){
 
-		                // create field and append to form
-		                $("<input>").attr({
-		                    type: "hidden",
-		                    id: "token_value",
-		                    name: "token_value",
-		                    value: response.token_value
-		                }).appendTo(theForm);
+                        // create field and append to form
+                        $("<input>").attr({
+                            type: "hidden",
+                            id: "token_value",
+                            name: "token_value",
+                            value: response.token_value
+                        }).appendTo(theForm);
 
-		                // success handler provided
-		                if (typeof data.success === 'function') {
-		                    // call the handler with payload
-		                    if (data.success(response) === false) {		                        
-		                        return; // stop processing
-		                    }
-		                }
-		                
-		                theForm.unbind('submit'); // unbind event handler
-		                theForm.submit(); // submit the form
-					},
-					error: function(response){
-	                    if (typeof data.error === 'function') {
-	                        data.error(response);
-	                    }
-					}
-				});
+                        // success handler provided
+                        if (typeof data.success === 'function') {
+                            // call the handler with payload
+                            if (data.success(response) === false) {                             
+                                return; // stop processing
+                            }
+                        }
+                        
+                        theForm.unbind('submit'); // unbind event handler
+                        theForm.submit(); // submit the form
+                    },
+                    error: function(response){
+                        if (typeof data.error === 'function') {
+                            data.error(response);
+                        }
+                    }
+                });
 
             });
         }
@@ -214,7 +214,7 @@ var hps = (function ($) {
             HPS.configureElement.apply(this, [options]);
         });
     };
-	
-	return HPS;
+    
+    return HPS;
 
 }(jQuery));
