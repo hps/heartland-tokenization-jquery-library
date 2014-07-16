@@ -187,7 +187,7 @@ var hps = (function ($) {
                             type: "hidden",
                             id: "token_value",
                             name: "token_value",
-                            value:  jresponse.token_value
+                            value:  response.token_value
                         }).appendTo(theForm);
 
                         var re = {
@@ -266,7 +266,7 @@ var hps = (function ($) {
     $.fn.SecureSubmit = function (options) {
 
         return this.each(function () {
-            if (!$(this).is("form") || typeof options !== 'object' || HPS.hasData($(this))) {
+            if (!$(this).is("form") || typeof options !== 'object' || $.hasData($(this))) {
 
                 return;
             }
