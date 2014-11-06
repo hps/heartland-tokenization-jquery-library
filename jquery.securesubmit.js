@@ -43,6 +43,31 @@ var hps = (function ($) {
                 return;
             }
 
+            var cardType = '';
+
+            var re = {
+                visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
+                mastercard: /^5[1-5][0-9]{14}$/,
+                amex: /^3[47][0-9]{13}$/,
+                diners: /^3(?:0[0-5]|[68][0-9])[0-9]{11}$/,
+                discover: /^6(?:011|5[0-9]{2})[0-9]{12}$/,
+                jcb: /^(?:2131|1800|35\d{3})\d{11}$/
+            };
+
+            if (re.visa.test($.trim(options.data.number))) {
+                cardType = 'visa';
+            } else if (re.mastercard.test($.trim(options.data.number))) {
+                cardType = 'mastercard';
+            } else if (re.amex.test($.trim(options.data.number))) {
+                cardType = 'amex';
+            } else if (re.diners.test($.trim(options.da ta.number))) {
+                cardType = 'diners';
+            } else if (re.discover.test($.trim(options.data.number))) {
+                cardType = 'discover';
+            } else if (re.jcb.test($.trim(options.data.number))) {
+                cardType = 'jcb';
+            }
+
             // request token
             $.ajax({
                 cache: false,
@@ -62,6 +87,10 @@ var hps = (function ($) {
                             HPS.error(response.error.message);
                         }
                     } else if (typeof options.success === 'function') {
+                        response.card_type = cardType;
+                        response.exp_month = $.trim(options.data.exp_month);
+                        response.exp_year = $.trim(options.data.exp_year);
+
                         options.success(response);
                     }
                 }
