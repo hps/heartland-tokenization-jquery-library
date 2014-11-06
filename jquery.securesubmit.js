@@ -295,8 +295,7 @@ var hps = (function ($) {
     $.fn.SecureSubmit = function (options) {
 
         return this.each(function () {
-            if (!$(this).is("form") || typeof options !== 'object' || $.hasData($(this))) {
-
+            if ($(this).is("form") === false || typeof options !== 'object' || typeof $(this).data(HPS.Tag) === 'object') {
                 return;
             }
 
