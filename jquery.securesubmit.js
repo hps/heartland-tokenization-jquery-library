@@ -15,6 +15,9 @@ var hps = (function ($) {
 
         tokenize: function (options) {
             var gateway_url, params, env;
+            var number = $.trim(options.data.number);
+            var exp_month = $.trim(options.data.exp_month);
+            var exp_year = $.trim(options.data.exp_year);
 
             // add additional service parameters
             params = $.param({
@@ -22,10 +25,10 @@ var hps = (function ($) {
                 "object": "token",
                 "token_type": "supt",
                 "_method": "post",
-                "card[number]": $.trim(options.data.number),
+                "card[number]": number,
                 "card[cvc]": $.trim(options.data.cvc),
-                "card[exp_month]": $.trim(options.data.exp_month),
-                "card[exp_year]": $.trim(options.data.exp_year)
+                "card[exp_month]": exp_month,
+                "card[exp_year]": exp_year
             });
 
             env = options.data.public_key.split("_")[1];
@@ -38,7 +41,7 @@ var hps = (function ($) {
 
 
             var d = new Date();
-            if (parseInt($.trim(options.data.exp_year)) < d.getFullYear()) {
+            if (parseInt(exp_year) < d.getFullYear()) {
                 options.error("The expiration year is in the past.");
                 return;
             }
@@ -54,17 +57,17 @@ var hps = (function ($) {
                 jcb: /^(?:2131|1800|35\d{3})\d{11}$/
             };
 
-            if (re.visa.test($.trim(options.data.number))) {
+            if (re.visa.test(number)) {
                 cardType = 'visa';
-            } else if (re.mastercard.test($.trim(options.data.number))) {
+            } else if (re.mastercard.test(number)) {
                 cardType = 'mastercard';
-            } else if (re.amex.test($.trim(options.data.number))) {
+            } else if (re.amex.test(number)) {
                 cardType = 'amex';
-            } else if (re.diners.test($.trim(options.da ta.number))) {
+            } else if (re.diners.test(number)) {
                 cardType = 'diners';
-            } else if (re.discover.test($.trim(options.data.number))) {
+            } else if (re.discover.test(number)) {
                 cardType = 'discover';
-            } else if (re.jcb.test($.trim(options.data.number))) {
+            } else if (re.jcb.test(number)) {
                 cardType = 'jcb';
             }
 
@@ -88,8 +91,8 @@ var hps = (function ($) {
                         }
                     } else if (typeof options.success === 'function') {
                         response.card_type = cardType;
-                        response.exp_month = $.trim(options.data.exp_month);
-                        response.exp_year = $.trim(options.data.exp_year);
+                        response.exp_month = exp_month;
+                        response.exp_year = exp_year;
 
                         options.success(response);
                     }
@@ -141,14 +144,14 @@ var hps = (function ($) {
             });
         },
 
-        trim: function (string) {   
-            
+        trim: function (string) {
+
             if (string !== undefined && typeof string === "string" ) {
-                
-                string = string.toString().replace(/^\s\s*/, '').replace(/\s\s*$/, ''); 
+
+                string = string.toString().replace(/^\s\s*/, '').replace(/\s\s*$/, '');
             }
-            
-            return string;                      
+
+            return string;
         },
 
         empty: function (val) {
@@ -196,8 +199,12 @@ var hps = (function ($) {
                     }
                 }
 
+                var number = $.trim($("#card_number").val());
+                var exp_month = $.trim($("#exp_month").val());
+                var exp_year = $.trim($("#exp_year").val());
+
                 var d = new Date();
-                if (parseInt($.trim($("exp_year"))) < d.getFullYear()) {
+                if (parseInt(exp_year) < d.getFullYear()) {
                     HPS.error("The expiration year is in the past.");
                     return;
                 }
@@ -205,10 +212,10 @@ var hps = (function ($) {
                 HPS.tokenize({
                     data: {
                         public_key: data.public_key,
-                        number: $.trim($("#card_number").val()),
+                        number: number,
                         cvc: $.trim($("#card_cvc").val()),
-                        exp_month: $.trim($("#exp_month").val()),
-                        exp_year: $.trim($("#exp_year").val())
+                        exp_month: exp_month,
+                        exp_year: exp_year
                     },
                     success: function (response) {
                         // create field and append to form
@@ -228,17 +235,17 @@ var hps = (function ($) {
                             jcb: /^(?:2131|1800|35\d{3})\d{11}$/
                         };
 
-                        if (re.visa.test($.trim($("#card_number").val()))) {
+                        if (re.visa.test(number)) {
                             cardType = 'visa';
-                        } else if (re.mastercard.test($.trim($("#card_number").val()))) {
+                        } else if (re.mastercard.test(number)) {
                             cardType = 'mastercard';
-                        } else if (re.amex.test($.trim($("#card_number").val()))) {
+                        } else if (re.amex.test(number)) {
                             cardType = 'amex';
-                        } else if (re.diners.test($.trim($("#card_number").val()))) {
+                        } else if (re.diners.test(number)) {
                             cardType = 'diners';
-                        } else if (re.discover.test($.trim($("#card_number").val()))) {
+                        } else if (re.discover.test(number)) {
                             cardType = 'discover';
-                        } else if (re.jcb.test($.trim($("#card_number").val()))) {
+                        } else if (re.jcb.test(number)) {
                             cardType = 'jcb';
                         }
 
@@ -253,21 +260,21 @@ var hps = (function ($) {
                             type: "hidden",
                             id: "exp_month",
                             name: "exp_month",
-                            value: $.trim($("#exp_month").val())
+                            value: exp_month
                         }).appendTo(theForm);
 
                         $("<input>").attr({
                             type: "hidden",
                             id: "exp_year",
                             name: "exp_year",
-                            value: $.trim($("#exp_year").val())
+                            value: exp_year
                         }).appendTo(theForm);
 
                         $("<input>").attr({
                             type: "hidden",
                             id: "last_four",
                             name: "last_four",
-                            value: $("#card_number").val().slice(-4)
+                            value: number.slice(-4)
                         }).appendTo(theForm);
 
                         // success handler provided
