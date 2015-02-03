@@ -144,6 +144,53 @@ var hps = (function ($) {
             });
         },
 
+        tokenize_encrypted_card: function (options) {
+            var gateway_url, params, env;
+
+            params = $.param({
+                "api_key": options.data.public_key,
+                "object": "token",
+                "token_type": "supt",
+                "_method": "post",
+                "encryptedcard[track]": $.trim(options.data.track),
+                "encryptedcard[track_method]": "swipe",
+                "encryptedcard[track_number]": $.trim(options.data.track_number),
+                "encryptedcard[ktb]": $.trim(options.data.ktb),
+                "encryptedcard[pin_block]": $.trim(options.data.pin_block)
+            });
+
+            env = options.data.public_key.split("_")[1];
+
+            if (env === "cert") {
+                gateway_url = HPS.Urls.CERT;
+            } else {
+                gateway_url = HPS.Urls.PROD;
+            }
+
+            // request token
+            $.ajax({
+                cache: false,
+                url: gateway_url,
+                data: params,
+                dataType: "jsonp",
+                success: function (response) {
+
+                    // Request failed, handle error
+                    if (typeof response.error === 'object') {
+                        // call error handler if provided and valid
+                        if (typeof options.error === 'function') {
+                            options.error(response.error);
+                        } else {
+                            // handle exception
+                            HPS.error(response.error.message);
+                        }
+                    } else if (typeof options.success === 'function') {
+                        options.success(response);
+                    }
+                }
+            });
+        },
+
         trim: function (string) {
 
             if (string !== undefined && typeof string === "string" ) {
