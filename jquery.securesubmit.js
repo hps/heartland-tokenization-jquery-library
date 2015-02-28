@@ -93,6 +93,7 @@ var hps = (function ($) {
                         response.card_type = cardType;
                         response.exp_month = exp_month;
                         response.exp_year = exp_year;
+                        response.last_four = number.slice(-4);
 
                         options.success(response);
                     }
