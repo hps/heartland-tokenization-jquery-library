@@ -1,0 +1,11 @@
+{
+    "name": "heartland-tokenization-jquery-library",
+    "repository": {
+        "type": "git",
+        "url": "http://github.com/SecureSubmit/heartland-tokenization-jquery-library.git"
+    },
+    "dependencies": {
+        "jquery": ">=1.4.0",
+    },
+    "main": "./jquery.securesubmit.js"
+}
