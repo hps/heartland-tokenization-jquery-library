@@ -218,12 +218,14 @@ var hps = (function ($) {
 
         _setStyle: function (elementid, htmlstyle) {
             document.getElementById(elementid).setAttribute('style', htmlstyle);
+            HPS._resizeFrame();
         },
 
         _appendStyle: function (elementid, htmlstyle) {
             var currstyle = $('#' + elementid).attr('style');
             var newstyle = (currstyle ? currstyle : '') + htmlstyle;
             document.getElementById(elementid).setAttribute('style', newstyle);
+            HPS._resizeFrame();
         },
 
         _setText: function (elementid, text) {
@@ -535,28 +537,29 @@ var hps = (function ($) {
             });
 
             HPS.Messages.receiveMessage(function(m){
-                switch(m.data.action) {
+                var data = JSON.parse(m.data);
+                switch(data.action) {
                     case 'tokenize': {
-                        HPS.tokenize_iframe(m.data.message);
+                        HPS.tokenize_iframe(data.message);
                         break;
                     }
                     case 'setStyle': {
-                        HPS._setStyle(m.data.id, m.data.style);
+                        HPS._setStyle(data.id, data.style);
                         HPS._resizeFrame();
                         break;
                     }
                     case 'appendStyle': {
-                        HPS._appendStyle(m.data.id, m.data.style);
+                        HPS._appendStyle(data.id, data.style);
                         HPS._resizeFrame();
                         break;
                     }
                     case 'setText': {
-                        HPS._setText(m.data.id, m.data.text);
+                        HPS._setText(data.id, data.text);
                         HPS._resizeFrame();
                         break;
                     }
                     case 'setPlaceholder': {
-                        HPS._setPlaceholder(m.data.id, m.data.text);
+                        HPS._setPlaceholder(data.id, data.text);
                         break;
                     }
                 }
@@ -611,17 +614,18 @@ var hps = (function ($) {
             });
 
             HPS.Messages.receiveMessage(function(m){
-                switch(m.data.action) {
+                var data = JSON.parse(m.data);
+                switch(data.action) {
                     case 'onTokenSuccess': {
-                        options.onTokenSuccess(m.data.response);
+                        options.onTokenSuccess(data.response);
                         break;
                     }
                     case 'onTokenError': {
-                        options.onTokenError(m.data.response);
+                        options.onTokenError(data.response);
                         break;
                     }
                     case 'resize': {
-                        HPS.resizeIFrame(frame, m.data.height);
+                        HPS.resizeIFrame(frame, data.height);
                         break;
                     }
                     case 'receiveMessageHandlerAdded': {
@@ -702,6 +706,7 @@ Messages.prototype.postMessage = function(message, target_url, target) {
        return;
     }
 
+    message = JSON.stringify(message);
     targetNode = this.window.hps[target];
 
     if (this.window['postMessage']) {
