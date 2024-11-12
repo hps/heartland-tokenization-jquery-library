@@ -1,3 +1,5 @@
+## *** This library is no longer maintained! Its functionality is offered in Global Payments’ current library which can be found [here](https://github.com/globalpayments/globalpayments-js). ***
+
 # [SecureSubmit jQuery Tokenization Library](https://developer.heartlandpaymentsystems.com/SecureSubmit)
 #### PCI Friendly Card Tokenization
 
